@@ -70,8 +70,8 @@ def heatmap_dir(athlete_id: int) -> Path:
     d.mkdir(parents=True, exist_ok=True)
     return d
 
-def heatmap_path(athlete_id: int) -> Path:
-    return athlete_dir(athlete_id) / "heatmap.png"
+def heatmap_geojson_path(athlete_id: int) -> Path:
+    return heatmap_dir(athlete_id) / "heatmap.geojson"
 
 
 def graph_dir(athlete_id: int) -> Path:

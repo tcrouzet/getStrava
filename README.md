@@ -102,3 +102,23 @@ https://uncubic-esta-amphibologically.ngrok-free.dev/strava/export_activities?at
 
 Pour télécharger les données de toutes les activitées:
 https://uncubic-esta-amphibologically.ngrok-free.dev/strava/export_streams?athlete_id=18278258
+
+### 7. Statistics
+
+Conversion des streams Strava en GPX
+
+```bash
+python3 ./app/to_gpx.py
+```
+
+Génération des graphes
+
+```bash
+python3 ./app/graph2.py
+```
+
+Génération heatmap
+
+```bash
+python3 ./app/heatmap.py
+```

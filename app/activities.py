@@ -89,36 +89,6 @@ def export_activities_json(
     }
 
 
-# def fetch_activity_streams(client, activity_id: int, keys: list[str] | None = None, series_type: str = "time", resolution: str = "high") -> dict:
-#     """
-#     Récupère les streams Strava pour une activité et retourne un dict simple {key: list}.
-    
-#     Paramètres:
-#       - client: instance stravalib.Client déjà authentifiée
-#       - activity_id: ID de l’activité Strava
-#       - keys: liste des clés de streams à récupérer. Exemples:
-#           ["time", "latlng", "altitude", "heartrate", "cadence", "watts",
-#            "distance", "velocity_smooth", "grade_smooth", "moving", "temp"]
-#         Si None, on prend un set par défaut utile pour GPX/analyses.
-#       - series_type: "time" (défaut) ou "distance"
-#       - resolution: "high", "medium" ou "low" (selon volume de données souhaité)
-    
-#     Retour:
-#       - dict où chaque clé demandée (si disponible) mappe vers une liste Python.
-#         Ex: {"time": [0,1,2,...], "latlng": [[lat, lon], ...], "altitude": [...], ...}
-#     """
-#     if keys is None:
-#         keys = ["time", "latlng", "altitude", "heartrate", "cadence", "watts"]
-
-#     streams = client.get_activity_streams(
-#         activity_id=activity_id,
-#         types=keys,
-#         series_type=series_type,
-#         resolution=resolution,
-#     )
-
-#     # stravalib 2.x renvoie un mapping {key: StreamModel}; on extrait .data
-#     return {k: (v.data if hasattr(v, "data") else v) for k, v in streams.items()}
 
 
 @router.get("/strava/activities")
