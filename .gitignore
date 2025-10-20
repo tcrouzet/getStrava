@@ -206,5 +206,6 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-.data/tokens
+data/tokens/
 .DS_Store
+data/*/heatmap/
