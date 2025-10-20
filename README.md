@@ -7,16 +7,20 @@ Récupérer les données Strava en Python
 
 ### 1. Fork project
 
+```bash
 cd /MyPythonDir
 git clone https://github.com/tcrouzet/getStrava
 code getStrava
+```
 
 Sous VSC ouvrir terminal et créer venv
+
+```bash
 python -m venv venv
 source venv/bin/activate
 pip install --upgrade pip
-
 pip install -r requirements.txt --upgrade
+```
 
 ### 2. Tunnel HTTPS
 
@@ -33,6 +37,7 @@ Installer ngrok en local: brew install ngrok/ngrok/ngrok
 Lui associer le ngrok Token: ngrok config add-authtoken YOUR_TOKEN
 
 Il sera sauvegardé dans ngrok.yml:
+
 cat "/Users/thierrycrouzet/Library/Application Support/ngrok/ngrok.yml"
 
 ngrok fournit un ngrok_URI du type:
