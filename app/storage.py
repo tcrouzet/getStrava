@@ -41,3 +41,40 @@ def save_streams(athlete_id: int, activity_id: int, streams: dict) -> None:
     with tmp.open("w", encoding="utf-8") as f:
         json.dump(streams, f, ensure_ascii=False, indent=2)
     tmp.replace(p)
+
+def load_stream(athlete_id: int, activity_id: int) -> dict | None:
+    p = stream_json_path(athlete_id, activity_id)
+    
+    if not p.exists():
+        return None
+    
+    try:
+        with p.open("r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        exit(f"✗ Erreur lors de la lecture de {p}: {e}")
+        return None
+    
+
+def gpx_dir(athlete_id: int) -> Path:
+    d = athlete_dir(athlete_id) / "gpx"
+    d.mkdir(parents=True, exist_ok=True)
+    return d
+
+def gpx_path(athlete_id: int, activity_id: int) -> Path:
+    return gpx_dir(athlete_id) / f"{activity_id}.gpx"
+
+
+def heatmap_dir(athlete_id: int) -> Path:
+    d = athlete_dir(athlete_id) / "heatmap"
+    d.mkdir(parents=True, exist_ok=True)
+    return d
+
+def heatmap_path(athlete_id: int) -> Path:
+    return athlete_dir(athlete_id) / "heatmap.png"
+
+
+def graph_dir(athlete_id: int) -> Path:
+    d = athlete_dir(athlete_id) / "graph"
+    d.mkdir(parents=True, exist_ok=True)
+    return d

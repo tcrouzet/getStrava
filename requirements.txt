@@ -5,3 +5,15 @@ python-dotenv
 uvicorn
 httpx
 itsdangerous
+
+# Graph
+pandas
+seaborn
+
+# Heatmap
+gpxpy
+numpy
+pillow
+tqdm
+scipy
+matplotlib

@@ -8,6 +8,16 @@ from .storage import load_existing_activities, save_activities, activities_json_
 
 router = APIRouter()
 
+ALL_STREAM_KEYS = [
+    "time", "distance", "latlng", "altitude",
+    "velocity_smooth", "heartrate", "cadence", "watts",
+    "temp", "grade_smooth", "moving",
+]
+
+DEFAULT_STREAM_KEYS = [
+    "time", "latlng", "altitude", "heartrate", "cadence", "watts"
+]
+
 def iter_all_activities(client, batch_size: int = 200) -> Iterator:
     offset = 0
     last_len = 0
@@ -79,36 +89,37 @@ def export_activities_json(
     }
 
 
-def fetch_activity_streams(client, activity_id: int, keys: list[str] | None = None, series_type: str = "time", resolution: str = "high") -> dict:
-    """
-    Récupère les streams Strava pour une activité et retourne un dict simple {key: list}.
+# def fetch_activity_streams(client, activity_id: int, keys: list[str] | None = None, series_type: str = "time", resolution: str = "high") -> dict:
+#     """
+#     Récupère les streams Strava pour une activité et retourne un dict simple {key: list}.
     
-    Paramètres:
-      - client: instance stravalib.Client déjà authentifiée
-      - activity_id: ID de l’activité Strava
-      - keys: liste des clés de streams à récupérer. Exemples:
-          ["time", "latlng", "altitude", "heartrate", "cadence", "watts",
-           "distance", "velocity_smooth", "grade_smooth", "moving", "temp"]
-        Si None, on prend un set par défaut utile pour GPX/analyses.
-      - series_type: "time" (défaut) ou "distance"
-      - resolution: "high", "medium" ou "low" (selon volume de données souhaité)
+#     Paramètres:
+#       - client: instance stravalib.Client déjà authentifiée
+#       - activity_id: ID de l’activité Strava
+#       - keys: liste des clés de streams à récupérer. Exemples:
+#           ["time", "latlng", "altitude", "heartrate", "cadence", "watts",
+#            "distance", "velocity_smooth", "grade_smooth", "moving", "temp"]
+#         Si None, on prend un set par défaut utile pour GPX/analyses.
+#       - series_type: "time" (défaut) ou "distance"
+#       - resolution: "high", "medium" ou "low" (selon volume de données souhaité)
     
-    Retour:
-      - dict où chaque clé demandée (si disponible) mappe vers une liste Python.
-        Ex: {"time": [0,1,2,...], "latlng": [[lat, lon], ...], "altitude": [...], ...}
-    """
-    if keys is None:
-        keys = ["time", "latlng", "altitude", "heartrate", "cadence", "watts"]
+#     Retour:
+#       - dict où chaque clé demandée (si disponible) mappe vers une liste Python.
+#         Ex: {"time": [0,1,2,...], "latlng": [[lat, lon], ...], "altitude": [...], ...}
+#     """
+#     if keys is None:
+#         keys = ["time", "latlng", "altitude", "heartrate", "cadence", "watts"]
 
-    streams = client.get_activity_streams(
-        activity_id=activity_id,
-        types=keys,
-        series_type=series_type,
-        resolution=resolution,
-    )
+#     streams = client.get_activity_streams(
+#         activity_id=activity_id,
+#         types=keys,
+#         series_type=series_type,
+#         resolution=resolution,
+#     )
 
-    # stravalib 2.x renvoie un mapping {key: StreamModel}; on extrait .data
-    return {k: (v.data if hasattr(v, "data") else v) for k, v in streams.items()}
+#     # stravalib 2.x renvoie un mapping {key: StreamModel}; on extrait .data
+#     return {k: (v.data if hasattr(v, "data") else v) for k, v in streams.items()}
+
 
 @router.get("/strava/activities")
 def list_activities(athlete_id: int, page: int = 1, per_page: int = 30):
@@ -142,26 +153,87 @@ def list_activities(athlete_id: int, page: int = 1, per_page: int = 30):
     return out
 
 
+# @router.api_route("/strava/export_streams", methods=["GET", "POST"])
+# def export_all_streams(
+#     athlete_id: int,
+#     sleep_ms: int = 500,
+#     keys: str = ",".join(ALL_STREAM_KEYS),
+#     max_count: int | None = None,
+#     force: bool = False,
+# ):
+#     acts_path = activities_json_path(athlete_id)
+#     if not acts_path.exists():
+#         raise HTTPException(status_code=400, detail=f"Catalogue introuvable: {acts_path}")
+
+#     activities = json.loads(acts_path.read_text(encoding="utf-8"))
+
+#     # with acts_path.open("r", encoding="utf-8") as f:
+#     #     activities = json.load(f)
+
+#     client = get_stravalib_client(athlete_id)
+#     keys_list = [k.strip() for k in keys.split(",") if k.strip()]
+
+#     processed = skipped = errors = 0
+
+#     for a in activities:
+#         aid = a.get("id")
+#         if not aid:
+#             continue
+
+#         p = stream_json_path(athlete_id, aid)
+#         if (not force) and p.exists():
+#             skipped += 1
+#             continue
+
+#         try:
+#             streams = fetch_activity_streams(client, aid, keys=keys_list)
+#             save_streams(athlete_id, aid, streams)
+#             processed += 1
+#         except Exception as e:
+#             errors += 1
+#             print(f"[streams] erreur activity_id={aid}: {e}")
+
+#         if max_count and processed >= max_count:
+#             break
+#         if sleep_ms > 0:
+#             from time import sleep
+#             sleep(sleep_ms / 1000.0)
+
+#         break
+
+#     return {
+#         "athlete_id": athlete_id,
+#         "processed": processed,
+#         "skipped_existing": skipped,
+#         "errors": errors,
+#         "dir": str(streams_dir(athlete_id)),
+#     }
+
+
 @router.api_route("/strava/export_streams", methods=["GET", "POST"])
 def export_all_streams(
     athlete_id: int,
-    sleep_ms: int = 150,
-    keys: str = "time,latlng,altitude,heartrate,cadence,watts",
+    sleep_ms: int = 500,
+    keys: str = ",".join(ALL_STREAM_KEYS),
     max_count: int | None = None,
     force: bool = False,
+    series_type: str = "time",
+    resolution: str = "high",
 ):
+
+    # max_count = 1
+
     acts_path = activities_json_path(athlete_id)
     if not acts_path.exists():
         raise HTTPException(status_code=400, detail=f"Catalogue introuvable: {acts_path}")
-
-    with acts_path.open("r", encoding="utf-8") as f:
-        activities = json.load(f)
+    
+    activities = json.loads(acts_path.read_text(encoding="utf-8"))
 
     client = get_stravalib_client(athlete_id)
+
     keys_list = [k.strip() for k in keys.split(",") if k.strip()]
 
     processed = skipped = errors = 0
-
     for a in activities:
         aid = a.get("id")
         if not aid:
@@ -173,8 +245,14 @@ def export_all_streams(
             continue
 
         try:
-            streams = fetch_activity_streams(client, aid, keys=keys_list)
-            save_streams(athlete_id, aid, streams)
+            streams = client.get_activity_streams(
+                activity_id=aid,
+                types=keys_list,
+                series_type=series_type,
+                resolution=resolution,
+            )
+            simple = {k: (v.data if hasattr(v, "data") else v) for k, v in streams.items()}
+            save_streams(athlete_id, aid, simple)
             processed += 1
         except Exception as e:
             errors += 1
@@ -185,8 +263,6 @@ def export_all_streams(
         if sleep_ms > 0:
             from time import sleep
             sleep(sleep_ms / 1000.0)
-
-        break
 
     return {
         "athlete_id": athlete_id,

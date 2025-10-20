@@ -1,13 +1,6 @@
 # app/auth.py
 
 
-# from fastapi import APIRouter
-# router = APIRouter()
-# @router.get("/ping")
-# def ping():
-#     return {"pong": True}
-
-
 import httpx
 from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import JSONResponse
