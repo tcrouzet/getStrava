@@ -90,11 +90,15 @@ https://(ngrok_URI)/auth/strava/login
 Dans mon cas:
 https://uncubic-esta-amphibologically.ngrok-free.dev/health
 
+### 6. Utiliser
+
+Pour se connecter à Stava:
 
 https://uncubic-esta-amphibologically.ngrok-free.dev/auth/strava/login
 
-https://uncubic-esta-amphibologically.ngrok-free.dev/strava/activities?athlete_id=18278258
+Pour télécharger toutes les activitées:
 
 https://uncubic-esta-amphibologically.ngrok-free.dev/strava/export_activities?athlete_id=18278258&batch_size=200
 
+Pour télécharger les données de toutes les activitées:
 https://uncubic-esta-amphibologically.ngrok-free.dev/strava/export_streams?athlete_id=18278258
