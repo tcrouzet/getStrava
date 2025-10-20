@@ -32,11 +32,14 @@ Créer un compte sur ngrok https://dashboard.ngrok.com/signup
 La séquence de configuration s'affiche:
 https://dashboard.ngrok.com/get-started/setup/macos
 
-Installer ngrok en local: brew install ngrok/ngrok/ngrok
+Installer ngrok en local et lui associer le ngrok Token: 
 
-Lui associer le ngrok Token: ngrok config add-authtoken YOUR_TOKEN
+```bash
+brew install ngrok/ngrok/ngrok
+ngrok config add-authtoken YOUR_TOKEN
+```
 
-Il sera sauvegardé dans ngrok.yml:
+Il sera sauvegardé en local dans ngrok.yml. Par exemple:
 
 cat "/Users/thierrycrouzet/Library/Application Support/ngrok/ngrok.yml"
 
@@ -44,7 +47,11 @@ ngrok fournit un ngrok_URI du type:
 https://uncubic-esta-amphibologically.ngrok-free.dev
 qui redigera en local les requêtes qui lui seront adressées.
 
-Dans un terminal, lancer ngrok pour activer la redirection: ngrok http 8080
+Dans un terminal, lancer ngrok pour activer la redirection:
+
+```bash
+ngrok http 8080
+```
 
 ### 3. Strava config
 
@@ -67,7 +74,10 @@ Pour créer SESSION_SECRET: python -c "import secrets; print(secrets.token_hex(6
 ### 5. Test
 
 Lancer l'app avec:
+
+```bash
 python -m uvicorn app.main:app --reload --port 8080
+```
 
 Tester depuis un navigateur
 http://localhost:8080/health
