@@ -1,9 +1,17 @@
 # getStrava
 
-Récupérer les données Strava en Python
+Sur Strava, j'enregistre ma vie de cycliste et j'ai soudain eu envie de la récupérer.
+J'ai découvert qu'on pouvait expoter un zip avec toutes nos données.
 
+1. [Aller sur son compte…](https://www.strava.com/account)
+2. Dérouler jusqu'en bas de page.
+3. Cliquer sur [Télécharger ou supprimer le compte.](https://www.strava.com/athlete/delete_your_account)
+4. Là il est possible de se faire envoyer un zip avec toutes les données.
+5. Je partage mon zip au 21/10/2025.
 
-## Local install on a Mac
+Avant de découvrirt cette solution, j'avais écrit un script Python pour télécharger toutes mes activités.
+
+## Local install du script python on a Mac
 
 ### 1. Fork project
 
