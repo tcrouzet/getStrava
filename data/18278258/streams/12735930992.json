@@ -1,0 +1,22 @@
+{
+  "altitude": [
+    0.6,
+    0.6
+  ],
+  "moving": [
+    true,
+    true
+  ],
+  "temp": [
+    31,
+    31
+  ],
+  "time": [
+    0,
+    5
+  ],
+  "grade_smooth": [
+    0.0,
+    0.0
+  ]
+}
