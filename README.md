@@ -1,13 +1,12 @@
 # getStrava
 
 Sur Strava, j'enregistre ma vie de cycliste et j'ai soudain eu envie de la récupérer.
-J'ai découvert qu'on pouvait expoter un zip avec toutes nos données.
+J'ai découvert qu'on pouvait demander l'export d'un zip avec toutes les données.
 
 1. [Aller sur son compte…](https://www.strava.com/account)
 2. Dérouler jusqu'en bas de page.
 3. Cliquer sur [Télécharger ou supprimer le compte.](https://www.strava.com/athlete/delete_your_account)
 4. Là il est possible de se faire envoyer un zip avec toutes les données.
-5. Je partage mon zip au 21/10/2025.
 
 Avant de découvrirt cette solution, j'avais écrit un script Python pour télécharger toutes mes activités.
 
@@ -111,22 +110,10 @@ https://uncubic-esta-amphibologically.ngrok-free.dev/strava/export_activities?at
 Pour télécharger les données de toutes les activitées:
 https://uncubic-esta-amphibologically.ngrok-free.dev/strava/export_streams?athlete_id=18278258
 
-### 7. Statistics
+### 7. Génération gpx
 
 Conversion des streams Strava en GPX
 
 ```bash
 python3 ./app/to_gpx.py
-```
-
-Génération des graphes
-
-```bash
-python3 ./app/graph2.py
-```
-
-Génération heatmap
-
-```bash
-python3 ./app/heatmap.py
 ```
